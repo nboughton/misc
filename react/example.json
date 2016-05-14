@@ -1,0 +1,19 @@
+{
+	"Items" : [
+		{
+			"Text" : "match string",
+			"Resp" : [
+				"response 1",
+				"response 2"
+			]
+		},
+		{
+			"Text" : "another match string",
+			"Resp" : [
+				"response 1",
+				"response 2",
+				"response 3"
+			]
+		}
+	]
+}

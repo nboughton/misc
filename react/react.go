@@ -70,7 +70,7 @@ func Match(s string) bool {
 	return reactRegex.MatchString(s)
 }
 
-// Respond returns a rif idx < len(reactions.Items)-1 {andom response from the first reaction to match the generated regex
+// Respond returns a random response from the first reaction to match the generated regex
 func Respond(s string) (string, error) {
 	str := reactRegex.FindAllString(s, 1)[0]
 	for _, r := range Reactions.Items {

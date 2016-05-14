@@ -52,7 +52,7 @@ func init() {
 			select {
 			case ev := <-watcher.Event:
 				// if modified reload
-				if ev.Mask == inotify.IN_MODIFY {
+				if ev.Mask == inotify.IN_CLOSE_WRITE {
 					readFile()
 					genRegex()
 				}

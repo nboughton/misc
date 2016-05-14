@@ -31,7 +31,7 @@ var (
 )
 
 func init() {
-	reactFile = flag.String("r", "reactions.json", "Path to reactions file")
+	reactFile = flag.String("react", "reactions.json", "Path to reactions file")
 	flag.Parse()
 
 	readFile()

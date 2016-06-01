@@ -31,12 +31,12 @@ func (c *Countdown) DHMSColonSeparated() string {
 
 // HMS returns "<hours>:<mins>:<sec>"
 func (c *Countdown) HMS() string {
-	return fmt.Sprintf("%v:%v:%v", c.TotalHours(), c.RemainingMinutes(), c.RemainingSeconds())
+	return fmt.Sprintf("%v:%v:%v", digital(c.TotalHours()), digital(c.RemainingMinutes()), digital(c.RemainingSeconds()))
 }
 
 // MS returns "<mins>:<sec>"
 func (c *Countdown) MS() string {
-	return fmt.Sprintf("%v:%v", c.TotalMinutes(), c.RemainingSeconds())
+	return fmt.Sprintf("%v:%v", digital(c.TotalMinutes()), digital(c.RemainingSeconds()))
 }
 
 // TotalDays returns the countdown in days

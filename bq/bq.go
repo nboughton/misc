@@ -50,6 +50,7 @@ func Search(words []string, pages int) ([]Quote, error) {
 						if len(text) > 0 && len(author) > 0 {
 							quotes = append(quotes, Quote{Author: author, Text: text})
 							text, author = "", ""
+							qFound++
 						}
 						break
 					}

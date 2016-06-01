@@ -24,6 +24,11 @@ func (c *Countdown) DHMS() string {
 	return fmt.Sprintf("%vd %vh %vm %vs", c.TotalDays(), c.RemainingHours(), c.RemainingMinutes(), c.RemainingSeconds())
 }
 
+// DHMSColonSeparated returns "<days>:<hours>:<mins>:<secs>"
+func (c *Countdown) DHMSColonSeparated() string {
+	return fmt.Sprintf("%v:%v:%v:%v", digital(c.TotalDays()), digital(c.RemainingHours()), digital(c.RemainingMinutes()), digital(c.RemainingSeconds()))
+}
+
 // HMS returns "<hours>:<mins>:<sec>"
 func (c *Countdown) HMS() string {
 	return fmt.Sprintf("%v:%v:%v", c.TotalHours(), c.RemainingMinutes(), c.RemainingSeconds())
@@ -95,4 +100,11 @@ func happened(to time.Time) bool {
 		return false
 	}
 	return true
+}
+
+func digital(i int) string {
+	if i < 10 {
+		return fmt.Sprintf("0%v", i)
+	}
+	return fmt.Sprintf("%v", i)
 }

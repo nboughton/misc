@@ -13,7 +13,7 @@ type Countdown struct {
 
 // New creates a new countdown object
 func New(to time.Time) (*Countdown, error) {
-	if time.Now().Before(to) {
+	if !happened(to) {
 		return &Countdown{To: to}, nil
 	}
 	return &Countdown{}, fmt.Errorf("%v is already in the past", to.Format(time.RFC822))
@@ -36,35 +36,63 @@ func (c *Countdown) MS() string {
 
 // TotalDays returns the countdown in days
 func (c *Countdown) TotalDays() int {
-	return int(math.Floor(c.To.Sub(time.Now()).Seconds() / 3600 / 24))
+	if !happened(c.To) {
+		return int(math.Floor(c.To.Sub(time.Now()).Seconds() / 3600 / 24))
+	}
+	return 0
 }
 
 // TotalHours return the countdown in hours
 func (c *Countdown) TotalHours() int {
-	return int(math.Floor(c.To.Sub(time.Now()).Seconds() / 3600))
+	if !happened(c.To) {
+		return int(math.Floor(c.To.Sub(time.Now()).Seconds() / 3600))
+	}
+	return 0
 }
 
 // TotalMinutes returns the countdown in minutes
 func (c *Countdown) TotalMinutes() int {
-	return int(math.Floor(c.To.Sub(time.Now()).Seconds() / 3600 / 60))
+	if !happened(c.To) {
+		return int(math.Floor(c.To.Sub(time.Now()).Seconds() / 3600 / 60))
+	}
+	return 0
 }
 
 // TotalSeconds returns the conutdown in seconds
 func (c *Countdown) TotalSeconds() int {
-	return int(c.To.Sub(time.Now()).Seconds())
+	if !happened(c.To) {
+		return int(c.To.Sub(time.Now()).Seconds())
+	}
+	return 0
 }
 
 // RemainingHours returns the remaining hours
 func (c *Countdown) RemainingHours() int {
-	return int(math.Floor(math.Mod(c.To.Sub(time.Now()).Seconds()/3600, 24)))
+	if !happened(c.To) {
+		return int(math.Floor(math.Mod(c.To.Sub(time.Now()).Seconds()/3600, 24)))
+	}
+	return 0
 }
 
 // RemainingMinutes returns the remaining minutes
 func (c *Countdown) RemainingMinutes() int {
-	return int(math.Floor(math.Mod(c.To.Sub(time.Now()).Seconds()/60, 60)))
+	if !happened(c.To) {
+		return int(math.Floor(math.Mod(c.To.Sub(time.Now()).Seconds()/60, 60)))
+	}
+	return 0
 }
 
 // RemainingSeconds returns the remaining seconds
 func (c *Countdown) RemainingSeconds() int {
-	return int(math.Floor(math.Mod(c.To.Sub(time.Now()).Seconds(), 60)))
+	if !happened(c.To) {
+		return int(math.Floor(math.Mod(c.To.Sub(time.Now()).Seconds(), 60)))
+	}
+	return 0
+}
+
+func happened(to time.Time) bool {
+	if time.Now().Before(to) {
+		return false
+	}
+	return true
 }

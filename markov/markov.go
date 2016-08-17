@@ -19,8 +19,10 @@ import (
 	"time"
 )
 
-var supportedFile = regexp.MustCompile(`.*\.txt$`)
-var textLength = 400
+var (
+	supportedFile = regexp.MustCompile(`.*\.txt$`)
+	textLength    = 400
+)
 
 // Prefix is a Markov chain prefix of one or more words.
 type Prefix []string

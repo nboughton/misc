@@ -1,6 +1,7 @@
-/* package markov is a minor adaptation of https://golang.org/doc/codewalk/markov.go
+/*
+Package markov is a minor adaptation of https://golang.org/doc/codewalk/markov.go
 with the difference being that it attempts to load text from a url linking to
-a .txt file and only returns chains that are < 440 characters long.
+a .txt file and only returns chains that are < textLength characters long.
 
 This is because I wrote it for implementation in an IRCBOT and the IRC protocol
 is limited in characters per message
@@ -19,6 +20,7 @@ import (
 )
 
 var supportedFile = regexp.MustCompile(`.*\.txt$`)
+var textLength = 400
 
 // Prefix is a Markov chain prefix of one or more words.
 type Prefix []string
@@ -96,11 +98,11 @@ func GoNuts(url string) (string, error) {
 	c := NewChain(2)   // Initialize a new Chain.
 	c.Build(resp.Body) // Build chains from standard input.
 
-	var text string
-	words := 400
-	for len(text) > 400 {
-		text = c.Generate(words) // Generate text.
-		words--
+	tLen := textLength
+	text := c.Generate(tLen)
+	for len(text) > tLen {
+		text = c.Generate(tLen) // Generate text.
+		tLen--
 	}
 	return text, nil
 }

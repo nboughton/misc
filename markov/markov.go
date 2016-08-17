@@ -2,9 +2,6 @@
 Package markov is a minor adaptation of https://golang.org/doc/codewalk/markov.go
 with the difference being that it attempts to load text from a url linking to
 a .txt file and only returns chains that are < textLength characters long.
-
-This is because I wrote it for implementation in an IRCBOT and the IRC protocol
-is limited in characters per message
 */
 package markov
 
@@ -21,7 +18,6 @@ import (
 
 var (
 	supportedFile = regexp.MustCompile(`.*\.txt$`)
-	textLength    = 400
 )
 
 // Prefix is a Markov chain prefix of one or more words.
@@ -84,9 +80,9 @@ func (c *Chain) Generate(n int) string {
 	return strings.Join(words, " ")
 }
 
-// GoNuts retrieves url (if it is supported) and returns a markov chain
+// FromURL retrieves url (if it is supported) and returns a markov chain
 // based on its contents
-func GoNuts(url string) (string, error) {
+func FromURL(url string, textLength int) (string, error) {
 	if !supportedFile.MatchString(url) {
 		return "", fmt.Errorf("Unsupported filetype: %v", url)
 	}
@@ -100,11 +96,6 @@ func GoNuts(url string) (string, error) {
 	c := NewChain(2)   // Initialize a new Chain.
 	c.Build(resp.Body) // Build chains from standard input.
 
-	tLen := textLength / 2
-	text := c.Generate(tLen)
-	for len(text) > textLength {
-		text = c.Generate(tLen) // Generate text.
-		tLen--
-	}
+	text := c.Generate(textLength)
 	return text, nil
 }

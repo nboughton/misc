@@ -100,9 +100,9 @@ func GoNuts(url string) (string, error) {
 	c := NewChain(2)   // Initialize a new Chain.
 	c.Build(resp.Body) // Build chains from standard input.
 
-	tLen := textLength
+	tLen := textLength / 2
 	text := c.Generate(tLen)
-	for len(text) > tLen {
+	for len(text) > textLength {
 		text = c.Generate(tLen) // Generate text.
 		tLen--
 	}

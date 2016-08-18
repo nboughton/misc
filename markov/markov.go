@@ -122,11 +122,6 @@ func FromFile(file string, textLength int) (string, error) {
 
 // trimToSentence returns the text trimmed to the last full stop
 func trimToSentence(text string) string {
-	lEnd := regexp.MustCompile(`\.$`)
-	if lEnd.MatchString(text) {
-		return text
-	}
-
 	for i := len(text) - 1; i > 0; i-- {
 		if string(text[i]) == "." {
 			return string(text[:i+1])

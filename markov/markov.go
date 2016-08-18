@@ -11,6 +11,7 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
+	"os"
 	"regexp"
 	"strings"
 	"time"
@@ -97,5 +98,40 @@ func FromURL(url string, textLength int) (string, error) {
 	c.Build(resp.Body) // Build chains from standard input.
 
 	text := c.Generate(textLength)
-	return text, nil
+	return trimToSentence(text), nil
+}
+
+// FromFile generates a markov chain from the contents of a text file
+func FromFile(file string, textLength int) (string, error) {
+	if !supportedFile.MatchString(file) {
+		return "", fmt.Errorf("Unsupported filetype: %v", file)
+	}
+
+	f, err := os.Open(file)
+	if err != nil {
+		return "", err
+	}
+	defer f.Close()
+
+	c := NewChain(2)
+	c.Build(f)
+
+	text := c.Generate(textLength)
+	return trimToSentence(text), nil
+}
+
+// trimToSentence returns the text trimmed to the last full stop
+func trimToSentence(text string) string {
+	lEnd := regexp.MustCompile(`\.$`)
+	if lEnd.MatchString(text) {
+		return text
+	}
+
+	for i := len(text) - 1; i > 0; i-- {
+		if string(text[i]) == "." {
+			return string(text[:i+1])
+		}
+	}
+
+	return ""
 }

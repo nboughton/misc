@@ -98,7 +98,7 @@ func FromURL(url string, textLength int) (string, error) {
 	c.Build(resp.Body) // Build chains from standard input.
 
 	text := c.Generate(textLength)
-	return trimToSentence(text), nil
+	return TrimToSentence(text), nil
 }
 
 // FromFile generates a markov chain from the contents of a text file
@@ -117,11 +117,11 @@ func FromFile(file string, textLength int) (string, error) {
 	c.Build(f)
 
 	text := c.Generate(textLength)
-	return trimToSentence(text), nil
+	return TrimToSentence(text), nil
 }
 
-// trimToSentence returns the text trimmed to the last full stop
-func trimToSentence(text string) string {
+// TrimToSentence returns the text trimmed to the last full stop
+func TrimToSentence(text string) string {
 	for i := len(text) - 1; i > 0; i-- {
 		if string(text[i]) == "." {
 			return string(text[:i+1])

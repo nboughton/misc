@@ -65,15 +65,14 @@ func (c *Chain) Build(r io.Reader) {
 
 // Generate returns a string of at most n words generated from Chain.
 func (c *Chain) Generate(n int) string {
-	rand.Seed(time.Now().UnixNano())
-	p := make(Prefix, c.prefixLen)
+	r, p := rand.New(rand.NewSource(time.Now().UnixNano())), make(Prefix, c.prefixLen)
 	var words []string
 	for i := 0; i < n; i++ {
 		choices := c.chain[p.String()]
 		if len(choices) == 0 {
 			break
 		}
-		next := choices[rand.Intn(len(choices))]
+		next := choices[r.Intn(len(choices))]
 		words = append(words, next)
 		p.Shift(next)
 	}

@@ -1,7 +1,6 @@
 /*
 Package markov is a minor adaptation of https://golang.org/doc/codewalk/markov.go
-with the difference being that it attempts to load text from a url linking to
-a .txt file and only returns chains that are < textLength characters long.
+with two additional functions for loading data from a file or url.
 */
 package markov
 

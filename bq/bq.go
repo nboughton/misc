@@ -23,6 +23,7 @@ func Search(words []string, pages int) ([]Quote, error) {
 
 	// get the search results
 	for i := 1; i <= pages; i++ {
+		qFound := false
 		doc, err := goquery.NewDocument(fmt.Sprintf("%v?q=%v&pg=%v", bQuoteURL, q, i))
 		if err != nil {
 			return quotes, err
@@ -35,9 +36,12 @@ func Search(words []string, pages int) ([]Quote, error) {
 			}
 			if len(qt.Text) > 0 && len(qt.Author) > 0 {
 				quotes = append(quotes, qt)
+				qFound = true
 			}
 		})
-
+		if !qFound {
+			break
+		}
 	}
 
 	if len(quotes) > 0 {

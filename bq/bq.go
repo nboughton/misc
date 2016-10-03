@@ -39,6 +39,7 @@ func Search(words []string, pages int) ([]Quote, error) {
 				qFound = true
 			}
 		})
+
 		if !qFound {
 			break
 		}

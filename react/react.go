@@ -7,9 +7,9 @@ import (
 	"log"
 	"regexp"
 
+	"github.com/fsnotify/fsnotify"
 	"github.com/nboughton/config/parser"
 	"github.com/nboughton/utils"
-	"golang.org/x/exp/inotify"
 )
 
 // Item is the match text and possible responses for a reacion
@@ -37,12 +37,12 @@ func init() {
 	readFile()
 	genRegex()
 
-	watcher, err := inotify.NewWatcher()
+	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		log.Panicln(err)
 	}
 
-	err = watcher.Watch(*reactFile)
+	err = watcher.Add(*reactFile)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,14 +50,14 @@ func init() {
 	go func() {
 		for {
 			select {
-			case ev := <-watcher.Event:
+			case ev := <-watcher.Events:
 				// if modified reload
-				if ev.Mask == inotify.IN_CLOSE_WRITE {
+				if ev.Op == fsnotify.Write {
 					readFile()
 					genRegex()
 				}
 
-			case err := <-watcher.Error:
+			case err := <-watcher.Errors:
 				log.Println("error:", err)
 
 			}
@@ -81,11 +81,12 @@ func Respond(s string) (string, error) {
 	return "", fmt.Errorf("No response found")
 }
 
-func readFile() {
+func readFile() error {
 	err := parser.NewParser(*reactFile).Scan(&Reactions)
 	if err != nil {
-		log.Panicln(err)
+		return err
 	}
+	return nil
 }
 
 func genRegex() {

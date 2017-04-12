@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-// Countdown contains the target date and a ticker to compare it to
+// Countdown contains the target date
 type Countdown struct {
 	To time.Time
 }

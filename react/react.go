@@ -5,11 +5,12 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"math/rand"
 	"regexp"
+	"time"
 
 	"github.com/fsnotify/fsnotify"
-	"github.com/nboughton/config/parser"
-	"github.com/nboughton/utils"
+	jfile "github.com/nboughton/go-utils/json/file"
 )
 
 // Item is the match text and possible responses for a reacion
@@ -31,6 +32,7 @@ var (
 )
 
 func init() {
+	rand.Seed(time.Now().UnixNano())
 	reactFile = flag.String("react", "reactions.json", "Path to reactions file")
 	flag.Parse()
 
@@ -75,14 +77,18 @@ func Respond(s string) (string, error) {
 	str := reactRegex.FindAllString(s, 1)[0]
 	for _, r := range Reactions.Items {
 		if r.Text == str {
-			return utils.RandS(r.Resp), nil
+			return randS(r.Resp), nil
 		}
 	}
 	return "", fmt.Errorf("No response found")
 }
 
+func randS(s []string) string {
+	return s[rand.Intn(len(s)-1)]
+}
+
 func readFile() error {
-	err := parser.NewParser(*reactFile).Scan(&Reactions)
+	err := jfile.Scan(*reactFile, &Reactions)
 	if err != nil {
 		return err
 	}

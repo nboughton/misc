@@ -84,7 +84,11 @@ func Respond(s string) (string, error) {
 }
 
 func randS(s []string) string {
-	return s[rand.Intn(len(s)-1)]
+	if len(s) > 1 {
+		return s[rand.Intn(len(s)-1)]
+	}
+
+	return ""
 }
 
 func readFile() error {

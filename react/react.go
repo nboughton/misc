@@ -88,7 +88,7 @@ func randS(s []string) string {
 		return s[rand.Intn(len(s)-1)]
 	}
 
-	return ""
+	return s[0]
 }
 
 func readFile() error {
